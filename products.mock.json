@@ -1,0 +1,31 @@
+{"productos": [{
+    "id":1,
+    "marca":"Modelo",
+    "modelo":"Especial",
+    "image":"",
+    "precio": 2865
+},  
+{
+    "id":2,
+    "marca":"Miller",
+    "modelo":"Lite",
+    "image":"",
+    "precio": 1245
+   
+},
+{
+    "id":3,
+    "marca":"Corona",
+    "modelo":"Premier",
+    "image":"",
+    "precio": 3000
+},
+{
+    "id":4,
+    "marca":"Budweiser",
+    "modelo":"Regular",
+    "image":"",
+    "precio": 4435
+
+}]
+}

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles/index.css" />
+    <link href="https://fonts.cdnfonts.com/css/dm-sans" rel="stylesheet" />
+    <title>Document</title>
+  </head>
+  <body class="home" id="home">
+    <header class="header">
+        <div class="menu-icon">
+          <img src="./images/menu.png" />
+        </div>
+        <div class="mask-group">
+          <img src="./images/adri.png" />
+        </div>
+      </header>
+      <main class="main">
+        <p class="greeting">Hi Mr. Michael</p>
+        <p class="welcome">Welcome Back!</p>
+        <div class="search">
+          <img src="./images/search.png" />
+          <input
+            type="text"
+            id="name"
+            name="name"
+            required
+            value="Search burger, pizza, drink or ect..."
+            minlength="4"
+            maxlength="8"
+            size="10"
+          />
+        </div>
+        <div class="selection_categories">
+          <div class="categories categories_head">
+            <p class="categoryP">Drink Category</p>
+            <p class="all">See All</p>
+          </div>
+          <div class="categories">
+            <div class="category">ALL</div>
+            <div class="category selected">
+              <img src="./images/Beer.png" />
+              BEER
+            </div>
+            <div class="category">
+              <img src="./images/Wine-glass.png" />
+              WHINE
+            </div>
+          </div>
+        </div>
+        <div class="categories categories_head">
+          <p class="categoryP">Popular</p>
+          <p class="all">See All</p>
+        </div>
+        <div id="products" class="products"></div>
+      </main>
+      <footer class="footer">
+        <div class="gradient">
+            <img src="./images/home.png" />
+        </div>
+        
+        <img src="./images/list.png" />
+        <img src="./images/bag-footer.png" />
+        <img src="./images/settings.png" />
+      </footer>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="./products.js"></script>
+  </body>
+</html>

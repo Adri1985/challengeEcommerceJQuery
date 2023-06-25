@@ -1,0 +1,38 @@
+//${stockProducts.stock_price[0].price}
+    main.innerHTML= main.innerHTML +
+  `<div class="header">
+    <p class = "model">${marca} ${modelo}</p>
+    <p class="price">$${stockProducts.stock_price[0].price}</p>
+  </div>
+  <div class = "header">
+    <p class="data">Origin: Import  Stock: ${stockProducts.stock_price[0].stock}</p>
+  </div>
+  <div class="header desc-title">
+    <p>Description</p>
+  </div>
+  <div class ="description">
+    <p>Selling imported beer in the us with nearly 60 millon cases in annual sales,
+        growing more than 15 millon cases over the past 2 years. A fully flavored mexican
+        lager consitently delivering ... Read more
+    </p>
+  </div>
+  <div class ="header">
+    <p>Size</p>
+  </div>`
+  const sizesDiv = document.createElement("div")
+  sizesDiv.className="header"
+  for (const stockPrice of stockProducts.stock_price){
+    const sizeButton = document.createElement("button")
+    sizeButton.textContent = `${stockPrice.size}`
+    sizesDiv.appendChild(sizeButton)
+  }
+  main.appendChild(sizesDiv)
+  main.innerHTML= main.innerHTML +
+
+  `
+  <div class="buttons">
+    <div class="bag">
+        <img src="./images/bag.png" alt="">
+    </div>
+    <button class = "add"> Add to cart</button>
+  </div>`
