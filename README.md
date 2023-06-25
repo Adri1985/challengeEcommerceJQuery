@@ -6,3 +6,5 @@
 
 # the stock and price get refreshed reading and fetching the /api/stockprice/code. Internally I have created mock files inside this folder
 # challengeEcommerceJQuery
+
+# implemented jquery for DOM manipulation
