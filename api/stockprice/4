@@ -2,7 +2,7 @@
     "id":4, 
     "stock_price": [
         {"size":"Half Barrel",
-         "stock":10,
+         "stock":22,
          "price": 100000
         },
         {"size":"12 - 24oz",
