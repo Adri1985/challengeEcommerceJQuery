@@ -84,7 +84,7 @@ function displayDetail(pid) {
   main.html(main.html() +
     `<div class="header">
       <p class="model">${marca} ${modelo}</p>
-      <p class="price">$${stockProducts.stock_price[0].price}</p>
+      <p class="price">$${stockProducts.stock_price[0].price/100}</p>
     </div>
     <div class="header">
       <p class="data">Origin: Import  Stock: ${stockProducts.stock_price[0].stock}</p>

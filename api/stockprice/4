@@ -3,15 +3,15 @@
     "stock_price": [
         {"size":"Half Barrel",
          "stock":10,
-         "price": 100
+         "price": 100000
         },
         {"size":"12 - 24oz",
          "stock":100,
-         "price": 50
+         "price": 500000
         },
         {"size":"18 - 12oz",
          "stock":30,
-         "price": 20
+         "price": 200000
         }
     ]
 }
