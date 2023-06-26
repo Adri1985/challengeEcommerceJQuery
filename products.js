@@ -1,13 +1,15 @@
-let ruta = './';
+let ruta = "./";
 
 const products = [];
 
 let stockProducts = [];
 
+let selectedPrice = 0;
+
 // Routing
 const routes = {
-  '/': homeController,
-  '/:modelo': productoController,
+  "/": homeController,
+  "/:modelo": productoController,
 };
 
 function homeController() {
@@ -20,19 +22,20 @@ function productoController(params) {
   const modelo = params.modelo;
 
   detail(modelo);
-  //$('#home').html(`Renderizando el producto con modelo ${modelo}`);
+  //document.getElementById('home').innerHTML = `Renderizando el producto con modelo ${modelo}`;
 }
 
 async function detail(modelo) {
-  let arr = modelo.split('-');
+  let arr = modelo.split("-");
   const id = arr[0];
   console.log(arr);
   await getStockAndPrice(id);
   console.log("stockAndPrice", stockProducts);
+
   displayDetail(id);
   setTimeout(() => {
     detail(modelo);
-  }, 5000); // Ejecuta la función detail nuevamente después de 5 segundos
+  }, 50000); // Ejecuta la función detail nuevamente después de 5 segundos
 }
 
 async function getStockAndPrice(pid) {
@@ -46,29 +49,32 @@ async function getStockAndPrice(pid) {
     console.log("stockProducts1", stockProducts);
     console.log("price", stockProducts.stock_price[0].price);
   } catch (error) {
-    console.error('Error al obtener los productos:', error);
+    console.error("Error al obtener los productos:", error);
   }
 }
 
 function displayDetail(pid) {
-  const main = $('#home');
-  const marca = products.find(el => el.id == pid).marca;
-  const modelo = products.find(el => el.id == pid).modelo;
+  console.log(stockProducts);
+  const main = $("#home");
+  const marca = products.find((el) => el.id == pid).marca;
+  const modelo = products.find((el) => el.id == pid).modelo;
   console.log("marca", marca);
   console.log("modelo", modelo);
 
-  main.empty(); 
+  main.empty(); // Limpia el contenido actual de main
 
-  const headerDiv = $('<div class="header"></div>');
-  const backDiv = $('<div class="menu-icon"></div>');
-  const img = $('<img src="./images/back.png">');
+  const headerDiv = $("<div>").addClass("header");
+  const backDiv = $("<div>").addClass("menu-icon");
+  const img = $("<img>").attr("src", "./images/back.png");
   backDiv.append(img);
-  const dotsDiv = $('<div class="menu-icon"></div>');
-  const dots = $('<img src="./images/dots.png">');
+  const dotsDiv = $("<div>").addClass("menu-icon");
+  const dots = $("<img>").attr("src", "./images/dots.png");
   dotsDiv.append(dots);
-  const detailP = $('<p>Detail</p>');
-  const a = $('<a href="/" class="a"></a>');
-  a.click(handleLinkClick);
+  const detailP = $("<p>").text("Detail");
+  let a = $("<a>")
+    .attr("href", "/")
+    .addClass("a")
+    .on("click", handleLinkClick);
   a.append(backDiv);
 
   headerDiv.append(a);
@@ -76,18 +82,22 @@ function displayDetail(pid) {
   headerDiv.append(dotsDiv);
   main.append(headerDiv);
 
-  const detail = $('<div class="detail"></div>');
-  const image = $('<img>');
-  image.attr('src', `./images/${marca} ${modelo}-img.png`);
+  const detail = $("<div>").addClass("detail");
+  const image = $("<img>").attr("src", `./images/${marca} ${modelo}-img.png`);
   detail.append(image);
   main.append(detail);
-  main.html(main.html() +
-    `<div class="header">
+  main.html(
+    main.html() +
+      `<div class="header">
       <p class="model">${marca} ${modelo}</p>
-      <p class="price">$${stockProducts.stock_price[0].price/100}</p>
+      <p class="price">$${
+        stockProducts.stock_price[selectedPrice].price / 100
+      }</p>
     </div>
     <div class="header">
-      <p class="data">Origin: Import  Stock: ${stockProducts.stock_price[0].stock}</p>
+      <p class="data">Origin: Import  Stock: ${
+        stockProducts.stock_price[selectedPrice].stock
+      }</p>
     </div>
     <div class="header desc-title">
       <p>Description</p>
@@ -99,20 +109,44 @@ function displayDetail(pid) {
     </div>
     <div class="header">
       <p>Size</p>
-    </div>`);
-  const sizesDiv = $('<div class="header"></div>');
+    </div>`
+  );
+  const sizesDiv = $("<div>").addClass("header");
+  index = 0;
   for (const stockPrice of stockProducts.stock_price) {
-    const sizeButton = $(`<button>${stockPrice.size}</button>`);
+    const sizeButton = $("<button>")
+      .text(`${stockPrice.size}`)
+      .attr("id", index)
+      .attr("type", "button")
+      .on("click", function (event) {
+        handleChangeVariation(event, pid);
+      });
+    if (selectedPrice == index) {
+      sizeButton.addClass("selected_size");
+    } else {
+      sizeButton.addClass("no_selected_size");
+    }
     sizesDiv.append(sizeButton);
+    index++;
   }
   main.append(sizesDiv);
-  main.html(main.html() +
-    `<div class="buttons">
-      <div class="bag">
-          <img src="./images/bag.png" alt="">
-      </div>
-      <button class="add"> Add to cart</button>
-    </div>`);
+  const buttonsDiv = $("<div>").addClass("buttons");
+  const bagDiv = $("<div>").addClass("bag");
+  const bagImage = $("<img>").attr("src", "./images/bag.png");
+  bagDiv.append(bagImage);
+  buttonsDiv.append(bagDiv);
+  const addButton = $("<button>")
+    .addClass("add")
+    .text("Add to cart");
+  buttonsDiv.append(addButton);
+  main.append(buttonsDiv);
+}
+
+function handleChangeVariation(e, pid) {
+  e.preventDefault();
+
+  selectedPrice = e.target.id;
+  displayDetail(pid);
 }
 
 function handleRouteChange() {
@@ -122,7 +156,8 @@ function handleRouteChange() {
   let matchedRoute = null;
 
   for (const route in routes) {
-    const routePattern = new RegExp(`^${route.replace(/:\w+/g, '([^/]+)')}$`);
+    //const routePattern = new RegExp(`^${route.replace(/:\w+/g, '(.+)')}$`);
+    const routePattern = new RegExp(`^${route.replace(/:\w+/g, "([^/]+)")}$`);
 
     if (routePattern.test(path)) {
       matchedRoute = route;
@@ -134,13 +169,14 @@ function handleRouteChange() {
     const params = extractParamsFromRoute(path, matchedRoute);
     routes[matchedRoute](params);
   } else {
-    $('#products').html('Ruta no encontrada');
+    $("#products").html("Ruta no encontrada");
   }
 }
 
 function extractParamsFromRoute(path, route) {
   const paramNames = route.match(/:(\w+)/g) || [];
-  const paramValues = path.match(new RegExp(`^${route.replace(/:\w+/g, '(.+)')}`)) || [];
+  const paramValues =
+    path.match(new RegExp(`^${route.replace(/:\w+/g, "(.+)")}`)) || [];
   return paramNames.reduce((params, paramName, index) => {
     const key = paramName.slice(1);
     const value = paramValues[index + 1];
@@ -149,12 +185,14 @@ function extractParamsFromRoute(path, route) {
   }, {});
 }
 
-$(window).on('DOMContentLoaded', handleRouteChange);
-$(window).on('popstate', handleRouteChange);
-//$(window).on('load', handleRouteChange);
+$(document).ready(function () {
+  handleRouteChange();
+  window.addEventListener("popstate", handleRouteChange);
+  //window.onload(handleRouteChange)
+});
 
 function obtenerProductosJson() {
-  const URLJSON = ruta + 'products.mock.json';
+  const URLJSON = ruta + "products.mock.json";
   fetch(URLJSON)
     .then((respuesta) => respuesta.json())
     .then((data) => {
@@ -165,7 +203,7 @@ function obtenerProductosJson() {
       listProducts(products);
     })
     .catch((error) => {
-      console.error('Error al obtener los productos:', error);
+      console.error("Error al obtener los productos:", error);
     });
 }
 
@@ -173,29 +211,35 @@ function handleLinkClick(event) {
   console.log("handleClick", event.target);
   event.preventDefault(); 
 
-  const href = $(this).attr('href');
+  const href = $(event.target).closest("a");
   console.log("href", href);
-  history.pushState({}, '', href); 
+  history.pushState({}, "", href.attr("href"));
+
   handleRouteChange(); 
 }
 
 obtenerProductosJson();
 
 function listProducts(products) {
-  let container = $('#products');
-  container.html('');
+  let container = $("#products");
+  container.html("");
   let product;
   for (const producto of products) {
-    let a = $('<a>').attr('href', `/${producto.id}-${producto.marca}${producto.modelo}`);
-    a.addClass('a');
-    a.on('click', handleLinkClick);
-    let div = $('<div>').addClass('card');
-    let title = $('<p>').text(`${producto.marca} ${producto.modelo}`);
-    title.addClass('card-title');
-    let img = $('<img>').attr('src', `./images/${producto.marca} ${producto.modelo}-img.png`);
-    let cardFooter = $('<div>').addClass('cardFooter');
-    let price = $('<p>').text(producto.precio / 100);
-    let add = $('<div>').html('+');
+    let a = $("<a>")
+      .attr("href", `/${producto.id}-${producto.marca}${producto.modelo}`)
+      .addClass("a")
+      .on("click", handleLinkClick);
+    let div = $("<div>").addClass("card");
+    let title = $("<p>")
+      .text(`${producto.marca} ${producto.modelo}`)
+      .addClass("card-title");
+    let img = $("<img>").attr(
+      "src",
+      `./images/${producto.marca} ${producto.modelo}-img.png`
+    );
+    let cardFooter = $("<div>").addClass("cardFooter");
+    let price = $("<p>").text(producto.precio / 100);
+    let add = $("<div>").html("+");
     div.append(title);
     div.append(img);
     cardFooter.append(price);
